@@ -3,6 +3,7 @@ import { createContext, useState, useEffect, FC, useContext } from 'react';
 const API_URL = import.meta.env.API_URL
 
 interface AuthState {
+    isAuthenticated: boolean;
     username: string | null;
     uid: string | null;
     is_admin: boolean | null;
@@ -13,12 +14,14 @@ interface AuthContextType extends AuthState {
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     register: (email: string, password: string, first_name: string, middle_name: string | null, last_name: string, mobile: string) => Promise<void>;
+    error: string | null
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: FC<{ children: React.ReactNode }> = ({ children }) => {
     const INITIAL_AUTH_STATE: AuthState = {
+        isAuthenticated: false,
         username: null,
         uid: null,
         is_admin: null,
@@ -26,6 +29,7 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({ children }) =>
     };
 
     const [auth, setAuth] = useState<AuthState>(INITIAL_AUTH_STATE);
+    const [error, setError] = useState<string | null>(null)
 
     const login = async (email: string, password: string) => {
         try {
@@ -38,20 +42,27 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({ children }) =>
                 body: JSON.stringify({ email, password })
             });
             const loginResponse = await loginRequest.json();
-            const loginToken = loginResponse.token;
-            localStorage.setItem('token', loginToken);
-            setAuth({
-                username: loginResponse.username,
-                uid: loginResponse.uid,
-                is_admin: loginResponse.is_admin,
-                is_verified: loginResponse.is_verified
-            });
+            if (loginResponse.success) {
+                const loginToken = loginResponse.token;
+                localStorage.setItem('token', loginToken);
+                setAuth({
+                    isAuthenticated: true,
+                    username: loginResponse.username,
+                    uid: loginResponse.uid,
+                    is_admin: loginResponse.is_admin,
+                    is_verified: loginResponse.is_verified
+                });
+                setError(null);
+            } else {
+                setError(loginResponse.error);
+            }
         } catch (error) {
+            setError('Something went wrong')
             console.error(error);
         }
     };
 
-    const register = async (email: string, password: string, first_name: string, middle_name: string | null ,last_name: string, mobile: string) => {
+    const register = async (email: string, password: string, first_name: string, middle_name: string | null, last_name: string, mobile: string) => {
         try {
             const registerRequest = await fetch(`${API_URL}/auth/register`, {
                 method: 'POST',
@@ -59,18 +70,24 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({ children }) =>
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ email, password, first_name, middle_name, last_name, mobile})
+                body: JSON.stringify({ email, password, first_name, middle_name, last_name, mobile })
             });
             const registerResponse = await registerRequest.json();
-            const registerToken = registerResponse.token;
-            localStorage.setItem('token', registerToken);
-            setAuth({
-                username: registerResponse.username,
-                uid: registerResponse.uid,
-                is_admin: registerResponse.is_admin,
-                is_verified: registerResponse.is_verified
-            });
+            if (registerResponse.success) {
+                const registerToken = registerResponse.token;
+                localStorage.setItem('token', registerToken);
+                setAuth({
+                    isAuthenticated: true,
+                    username: registerResponse.username,
+                    uid: registerResponse.uid,
+                    is_admin: registerResponse.is_admin,
+                    is_verified: registerResponse.is_verified
+                });
+            } else {
+                setError(registerResponse.error);
+            }
         } catch (error) {
+            setError('Something went wrong');
             console.error(error);
         }
     }
@@ -107,7 +124,7 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({ children }) =>
     }, []);
 
     return (
-        <AuthContext.Provider value={{ ...auth, login, logout, register }}>
+        <AuthContext.Provider value={{ ...auth, login, logout, register, error : error }}>
             {children}
         </AuthContext.Provider>
     );
