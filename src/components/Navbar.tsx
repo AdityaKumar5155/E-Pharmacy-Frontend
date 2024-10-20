@@ -1,14 +1,13 @@
 import {navItems} from '../constants/index.ts'
 import { navItemType } from '../types'
+import NavItem from './NavItem.tsx'
 
 const Navbar = () => {
   return (
-    <nav className="space-x-5">
+    <nav className="space-x-5 flex">
       {
-        navItems.map((item: navItemType) => (
-          <a key={item.title} href={item.url}>
-            {item.title}
-          </a>
+        navItems.map((item: navItemType, index) => (
+          <NavItem key={index} navItem={item} />
         ))
       }
     </nav>

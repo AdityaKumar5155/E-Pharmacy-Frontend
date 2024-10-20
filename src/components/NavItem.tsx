@@ -7,7 +7,7 @@ const NavItemBasic: FC<navItemBasicProps> = ({ navItem, isDropped }) => {
     return (
         <Link to={url} className="group relative cursor-pointer font-medium transition-all duration-300 hover:font-bold">
             {`${title}${isDropdown ? (isDropped ? " ▲" : " ▼") : ""}`}
-            <div className=" underline z-0 border-blue-500 absolute bottom-0 left-0 h-0.5 bg-blue-500 underline-width-0 underline-transition group-hover:underline-width-full"></div>
+            <div className=" underline z-0 border-cyan-400 absolute bottom-0 left-0 h-0.5 bg-cyan-400 underline-width-0 underline-transition group-hover:underline-width-full"></div>
         </Link>
     )
 }
