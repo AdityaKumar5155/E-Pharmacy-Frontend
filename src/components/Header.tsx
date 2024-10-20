@@ -1,3 +1,4 @@
+import Navbar from "./Navbar"
 
 const LogoSection = () => {
   return (
@@ -12,8 +13,9 @@ const LogoSection = () => {
 
 const Header = () => {
   return (
-    <header className="sticky top-0 right-0 left-0 h-16 bg-white flex items-center px-5 shadow-md">
+    <header className="sticky top-0 right-0 left-0 h-16 bg-white flex items-center px-5 shadow-md justify-between">
       <LogoSection/>
+      <Navbar />
     </header>
   )
 }
