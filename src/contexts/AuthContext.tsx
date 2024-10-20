@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, FC } from 'react';
+import { createContext, useState, useEffect, FC, useContext } from 'react';
 
 const API_URL = import.meta.env.API_URL
 
@@ -112,3 +112,5 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({ children }) =>
         </AuthContext.Provider>
     );
 };
+
+export const useAuth = () => useContext(AuthContext);
