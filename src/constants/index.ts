@@ -1,18 +1,26 @@
 export const navItems = [
     {
         title: 'Home',
-        url: '/'
+        url: '/',
+        isDropdown: false,
+        dropdownItems: []
     },
     {
         title: 'Store',
-        url: '/store'
+        url: '/store',
+        isDropdown: false,
+        dropdownItems: []
     },
     {
         title: 'Contact Us',
-        url: '/contact'
+        url: '/contact',
+        isDropdown: false,
+        dropdownItems: []
     },
     {
         title: 'About Us',
-        url: '/about'
+        url: '/about',
+        isDropdown: false,
+        dropdownItems: []
     }
 ]
