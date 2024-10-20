@@ -10,15 +10,32 @@ interface AuthState {
     is_verified: Boolean | null;
 }
 
-interface AuthContextType {
-    auth: AuthState;
+interface AuthContextType extends AuthState {
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     register: (email: string, password: string, first_name: string, middle_name: string | null, last_name: string, mobile: string) => Promise<void>;
     error: string | null
 }
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+const defaultAuthContext: AuthContextType = {
+    isAuthenticated: false,
+    username: null,
+    uid: null,
+    is_admin: null,
+    is_verified: null,
+    login: async () => {
+        console.warn("login called without AuthProvider");
+    },
+    logout: () => {
+        console.warn("logout called without AuthProvider");
+    },
+    register: async () => {
+        console.warn("register called without AuthProvider");
+    },
+    error: null
+};
+
+export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 export const AuthProvider: FC<{ children: React.ReactNode }> = ({ children }) => {
     const INITIAL_AUTH_STATE: AuthState = {
@@ -125,7 +142,7 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({ children }) =>
     }, []);
 
     return (
-        <AuthContext.Provider value={{ auth, login, logout, register, error : error }}>
+        <AuthContext.Provider value={{ ...auth, login, logout, register, error : error }}>
             {children}
         </AuthContext.Provider>
     );
