@@ -10,7 +10,8 @@ interface AuthState {
     is_verified: Boolean | null;
 }
 
-interface AuthContextType extends AuthState {
+interface AuthContextType {
+    auth: AuthState;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     register: (email: string, password: string, first_name: string, middle_name: string | null, last_name: string, mobile: string) => Promise<void>;
@@ -124,7 +125,7 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({ children }) =>
     }, []);
 
     return (
-        <AuthContext.Provider value={{ ...auth, login, logout, register, error : error }}>
+        <AuthContext.Provider value={{ auth, login, logout, register, error : error }}>
             {children}
         </AuthContext.Provider>
     );
