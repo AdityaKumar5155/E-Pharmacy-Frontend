@@ -3,11 +3,11 @@ import { createContext, useState, useEffect, FC, useContext } from 'react';
 const API_URL = import.meta.env.API_URL
 
 interface AuthState {
-    isAuthenticated: boolean;
+    isAuthenticated: Boolean;
     username: string | null;
     uid: string | null;
-    is_admin: boolean | null;
-    is_verified: boolean | null;
+    is_admin: Boolean | null;
+    is_verified: Boolean | null;
 }
 
 interface AuthContextType extends AuthState {
