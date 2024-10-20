@@ -13,7 +13,7 @@ const LogoSection = () => {
 
 const Header = () => {
   return (
-    <header className="sticky top-0 right-0 left-0 h-16 bg-white flex items-center px-5 shadow-md justify-between">
+    <header className="sticky top-0 right-0 left-0 h-16 bg-white flex items-center px-5 shadow-md justify-between bg-gradient-to-b from-white to-cyan-100">
       <LogoSection/>
       <Navbar />
     </header>
